@@ -1,0 +1,72 @@
+{% extends "../../base.html" %} 
+{% block title %}Dashboard{%endblock %} 
+
+{% block content %}
+
+<div class="container">
+  <div class="col-12">
+    <h1 class="h2">Driver Delivery Dashboard</h1>
+  </div>
+  <div class="col-12 d-flex justify-content-between">
+    <div>Manage <b>order</b> deliveries</div>
+    <div><a href="{% url "account:edit_details" %}">Change Details</a></div>
+  </div>
+  <hr />
+</div>
+<div class="container">
+  {% for order in orders %}
+  <div class="row g-3 w-100" style="box-sizing: content-box !important;">
+    <div class="col-12 bg-light p-3">
+      <div class="d-flex flex-row justify-content-center align-items-center ">
+        <div class="pe-3 flex-grow-0" style="flex-basis: 35%;">Order Date</div>
+        <div class="flex-grow-1" style="flex-basis: 30%;">Order Items</div>
+        <div class="flex-grow-1" style="flex-basis: 30%;">Delivery Address</div>
+        <div class="flex-grow-1" style="flex-basis: 25%;">Total Paid</div>
+        <div class="flex-grow-1" style="flex-basis: 25%;">Deliver Status</div>
+        <div class="flex-grow-1" style="flex-basis: 25%;">Update Delivery Status</div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="d-flex flex-row justify-content-evenly">
+        <div class="pe-3 flex-grow-0" style="flex-basis: 35%;">{{ order.created }}</div>
+        <div class="p-0 flex-grow-0" style="flex-basis: 30%;">
+          {% for item in order.items.all %}
+          <div class="card mb-3 border-0">
+            <div class="row g-0">
+              <div class="col-md-2 d-none d-md-block">
+                <img class="img-fluid" style="width:90px" src="{{item.product.image.url}}" />
+              </div>
+              <div class="col-md-10">
+                <div class="card-body p-1">
+                  <a class="text-decoration-none" href="{{ item.product.get_absolute_url }}">
+                    <p class="card-text small">{{item.product|title}}</p>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="flex-grow-0" style="flex-basis: 30%;">
+              <div class="d-flex flex-column">
+                <h6>{{order.full_name}},</h6> 
+                <h6>{{order.address1}},</h6>
+                <h6>{{order.address2}},</h6>
+                <h6>{{order.phone}}</h6>
+              </div>
+        </div>
+        <div class="fw-bold flex-grow-0" style="flex-basis: 25%;">${{ order.total_paid }}</div>
+        <div class="flex-grow-0" style="flex-basis: 25%;vertical-align: middle;">
+          {% if order.delivery_status  %}
+          <span class="fas fa-check-square"  style='font-size:24px;color:green'></span>
+          {% else %}
+          <span  class="fas fa-window-close"  style='font-size:24px;color:red'></span>
+          {% endif %}
+        </div>
+        <div class="flex-grow-0" style="flex-basis: 25%;">{{ order.delivery_status|yesno:"✔,✘" }}</div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from six import text_type
+
+#Class that generates a token when resetting a password. 
+class AccountActivationTokenGenerator(PasswordResetTokenGenerator):
+    def _make_hash_value(self, user, timestamp):
+        return (
+            text_type(user.pk) + text_type(timestamp) +
+            text_type(user.is_active)
+        )
+
+
+account_activation_token = AccountActivationTokenGenerator()
+
+#Sources Used
+#https://www.programcreek.com/python/example/88555/django.contrib.auth.tokens.PasswordResetTokenGenerator

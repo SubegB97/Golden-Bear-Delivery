@@ -1,0 +1,8 @@
+{% autoescape off %}
+Hi {{ order.full_name }},
+
+Your order {{order_key}} has successfully been confirmed. 
+Please click the link below to see your confirmed order details.
+http://{{ domain }}/account/dashboard/
+
+{% endautoescape %}
